@@ -1,9 +1,24 @@
 /* eslint-disable @next/next/link-passhref */
 import React from 'react';
 import Link from 'next/link';
-import Input from '../components/Input';
+import { Input, InputWrapper } from '../ui/Input';
 
-const Form = () => {
+import { useForm } from 'react-hook-form';
+
+interface IFormProps {
+    email: string;
+    username: string;
+    password: string;
+}
+
+const RegisterForm = () => {
+
+  const { register, handleSubmit } = useForm<IFormProps>();
+
+  const onSubmit = (data: IFormProps) => {
+    console.log(data);
+  }
+
   return (
     <div className='p-4'>
         <h1
@@ -14,11 +29,27 @@ const Form = () => {
         >
             Sign up to see photos and videos from your friends.
         </p>
-        <form className='mt-2'>
+        <form className='mt-2' onSubmit={handleSubmit(onSubmit)}>
             <div className='flex flex-col space-y-4'>
-            <Input inputLabel='Email' type='email' placeholder='Email address' />
-            <Input inputLabel='Username' type='text' placeholder='Username' />
-            <Input inputLabel='Password' type='password' placeholder='Password' />
+                <InputWrapper inputLabel='Email'>
+                    <Input
+                    {...register('email')}
+                    type='email'
+                    placeholder='Email address'
+                    />
+                </InputWrapper>
+                <InputWrapper inputLabel='Email'>
+                    <Input
+                    {...register('username')}
+                    placeholder='Username'
+                    type='text' />
+                </InputWrapper>
+                <InputWrapper inputLabel='Password'>
+                    <Input
+                    {...register('password')}
+                    placeholder='Password'
+                    type='password' />
+                </InputWrapper>
             </div>
             <div className='flex mt-5'>
                 <button
@@ -45,4 +76,4 @@ const Form = () => {
 
 
 
-export default Form
+export default RegisterForm

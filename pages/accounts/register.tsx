@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import React from 'react'
-import Card from '../../components/Card';
-import Form from '../../components/Form';
-import PlacholderImage from '../../components/Image';
+import Card from '../../components/ui/Card';
+import RegisterForm from '../../components/forms/registerForm';
+import PlacholderImage from '../../components/ui/Image';
  
 const Register = () => {
   return (
@@ -15,7 +15,7 @@ const Register = () => {
         >
             <Card
                 leftElement={<PlacholderImage />}
-                rightElement={<Form />}
+                rightElement={<RegisterForm />}
             />
         </div>
     </div>
