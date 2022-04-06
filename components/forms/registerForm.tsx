@@ -2,9 +2,12 @@
 import React from 'react';
 import Link from 'next/link';
 import { Input, InputWrapper } from '../ui/Input';
-
+import { useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
+import { CREATE_USER } from '../../graphql/mutations'
+import { convertToObject } from '../../utils';
 
+// Todo: display error messages on form
 interface IFormProps {
     email: string;
     username: string;
@@ -13,10 +16,32 @@ interface IFormProps {
 
 const RegisterForm = () => {
 
-  const { register, handleSubmit } = useForm<IFormProps>();
+    const [registerUser] = useMutation(CREATE_USER);
+    const { register, handleSubmit, formState, setError } = useForm<IFormProps>();
 
-  const onSubmit = (data: IFormProps) => {
-    console.log(data);
+    const onSubmit = async (data: IFormProps) => {
+		try {
+			const response = await registerUser({
+				 variables: {
+					 email: data.email,
+					 username: data.username,
+					 password: data.password
+				 }
+			 });
+
+             if (response.data.signUp.success) {
+                 console.log('success'); //navigate to the login page
+             }
+             else if(response.data.signUp.error) {
+                 const errors = convertToObject(response.data.signUp.error);
+                 Object.keys(errors).forEach(key => {
+                     setError(key as any, { message: errors[key]}, { shouldFocus: true });
+                 });
+             }			
+             	
+		} catch (error) {
+			console.error(error);
+		}
   }
 
   return (
@@ -33,26 +58,30 @@ const RegisterForm = () => {
             <div className='flex flex-col space-y-4'>
                 <InputWrapper inputLabel='Email'>
                     <Input
-                    {...register('email')}
-                    type='email'
+                    {...register('email', { required: true })}
+                    type='text'
                     placeholder='Email address'
                     />
+                    {formState.errors.email ? <ErrorLabel text={formState.errors.email.message} /> : null }
                 </InputWrapper>
-                <InputWrapper inputLabel='Email'>
+                <InputWrapper inputLabel='Username'>
                     <Input
-                    {...register('username')}
+                    {...register('username', { required: true })}
                     placeholder='Username'
                     type='text' />
+                    {formState.errors.username ? <ErrorLabel text={formState.errors.username.message} /> : null}
                 </InputWrapper>
                 <InputWrapper inputLabel='Password'>
                     <Input
-                    {...register('password')}
+                    {...register('password', { required: true })}
                     placeholder='Password'
                     type='password' />
+                    {formState.errors.password ? <ErrorLabel text={formState.errors.password.message} /> : null}
                 </InputWrapper>
             </div>
             <div className='flex mt-5'>
                 <button
+                disabled={formState.isSubmitting}				
                 type='submit'
                 className=' bg-blue-400 rounded-sm text-white font-semibold py-1 px-4 w-full'
                 >Sign Up</button>
@@ -72,6 +101,16 @@ const RegisterForm = () => {
         </div>
     </div>
   )
+}
+
+type ErrorLabelProps = {
+    text?: string
+}
+
+const ErrorLabel: React.FunctionComponent<ErrorLabelProps> = ({ text }) => {
+    return (
+        <div className='text-red-500 text-sm'>{text}</div>
+    );
 }
 
 

@@ -8,7 +8,7 @@ const signin = () => {
             <div
             className='flex flex-col space-y-2'
             >
-                <h1 className='text-4xl font-semibold text-center mb-10'>Instaclone</h1>
+                <h1 className='text-5xl font-semibold text-center mb-10 mt-2'>Instaclone</h1>
                 <LoginForm />
             </div>
         </figure>
