@@ -1,9 +1,13 @@
-/* eslint-disable @next/next/link-passhref */
+import { useMutation } from '@apollo/client'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React from 'react'
+import { useForm } from 'react-hook-form'
+import { LOGIN_USER } from '../../graphql/mutations'
+import { convertToObject } from '../../utils'
+import { ErrorLabel } from '../ui/ErrorLabel'
 import { Input, InputWrapper } from '../ui/Input'
 
-import { useForm } from 'react-hook-form'
 
 type FormProps = {
     usernameOrEmail: string;
@@ -11,10 +15,34 @@ type FormProps = {
 }
 
 const LoginForm = () => {
-  const { register, handleSubmit } = useForm<FormProps>();
+  const { register, handleSubmit, formState, setError } = useForm<FormProps>();
+  const [loginUser] = useMutation(LOGIN_USER);
+  const router = useRouter();
 
-  const onSubmit = (data: FormProps) => {
-    console.log(data);
+  const onSubmit = async (data: FormProps) => {
+      
+    try {
+        const response = await loginUser({
+            variables: {
+                usernameOrEmail: data.usernameOrEmail,
+                password: data.password
+            },            
+        });
+
+        if(response.data.signIn.success) {
+            console.log('save token in state') // navigate to the home page
+            router.push('/');
+        }
+        else {
+            const errors = convertToObject(response.data.signIn.error);
+            Object.keys(errors).forEach(key => {
+                setError(key as any, { message: errors[key]}, { shouldFocus: true });
+            });
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -29,23 +57,24 @@ const LoginForm = () => {
                 placeholder='Username or Email'
                 type='text'
                 />
+                {formState.errors.usernameOrEmail && <ErrorLabel text={formState.errors.usernameOrEmail.message} />}
             </InputWrapper>
             <InputWrapper
             inputLabel='Password'
+            rightElement={<p className='text-sm text-blue-500'>Forgotten password?</p>}
             >
                 <Input
                 {...register('password')}
                 placeholder='Password'
                 type='password'
                 />
+                {formState.errors.password && <ErrorLabel text={formState.errors.password.message} />}
             </InputWrapper>
-        </div>
-        <div>
-            <p className='text-sm text-blue-500'>Forgotten password?</p>
         </div>
         <div className='flex mt-5'>
             <button
             type='submit'
+            disabled={formState.isSubmitting}
             className='bg-blue-400 rounded-sm text-white font-semibold py-1 px-4 w-full mt-5'
             >
                 Sign In
@@ -53,7 +82,7 @@ const LoginForm = () => {
         </div>
         <div className='my-4'>
             <p className='text-center text-sm text-gray-500'>Dont have an account?
-                <Link href='/accounts/register'>
+                <Link href='/accounts/register' passHref>
                     <span className='text-blue-500 font-medium cursor-pointer'> Sign up</span>
                 </Link> 
             </p>

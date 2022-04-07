@@ -11,3 +11,15 @@ export const CREATE_USER = gql`
   }
 }    
 `
+export const LOGIN_USER = gql`
+    mutation SignIn($usernameOrEmail: String!, $password: String!) {
+    signIn(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
+    success
+    token
+    error {
+      message
+      field
+    }
+  }
+}
+`

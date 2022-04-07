@@ -1,13 +1,14 @@
-/* eslint-disable @next/next/link-passhref */
-import React from 'react';
-import Link from 'next/link';
-import { Input, InputWrapper } from '../ui/Input';
 import { useMutation } from '@apollo/client';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { CREATE_USER } from '../../graphql/mutations'
+import { CREATE_USER } from '../../graphql/mutations';
 import { convertToObject } from '../../utils';
+import { ErrorLabel } from '../ui/ErrorLabel';
+import { Input, InputWrapper } from '../ui/Input';
 
-// Todo: display error messages on form
+// Todo: add show and hide toggle for password
 interface IFormProps {
     email: string;
     username: string;
@@ -15,7 +16,7 @@ interface IFormProps {
 }
 
 const RegisterForm = () => {
-
+    const router = useRouter();
     const [registerUser] = useMutation(CREATE_USER);
     const { register, handleSubmit, formState, setError } = useForm<IFormProps>();
 
@@ -29,8 +30,8 @@ const RegisterForm = () => {
 				 }
 			 });
 
-             if (response.data.signUp.success) {
-                 console.log('success'); //navigate to the login page
+             if (response.data.signUp.success) {                
+                router.push('/accounts/signin');
              }
              else if(response.data.signUp.error) {
                  const errors = convertToObject(response.data.signUp.error);
@@ -40,7 +41,7 @@ const RegisterForm = () => {
              }			
              	
 		} catch (error) {
-			console.error(error);
+			return error;
 		}
   }
 
@@ -94,23 +95,13 @@ const RegisterForm = () => {
         </div>
         <div className='mt-4'>
             <p className='text-center text-sm'>Have an account?
-                <Link href='/accounts/signin'>
+                <Link href='/accounts/signin' passHref>
                     <span className='text-blue-500 cursor-pointer'> Log in</span>
                 </Link> 
             </p>
         </div>
     </div>
   )
-}
-
-type ErrorLabelProps = {
-    text?: string
-}
-
-const ErrorLabel: React.FunctionComponent<ErrorLabelProps> = ({ text }) => {
-    return (
-        <div className='text-red-500 text-sm'>{text}</div>
-    );
 }
 
 
