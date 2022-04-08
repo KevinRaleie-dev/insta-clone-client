@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { LOGIN_USER } from '../../graphql/mutations'
+import { setToken } from '../../store'
 import { convertToObject } from '../../utils'
 import { ErrorLabel } from '../ui/ErrorLabel'
 import { Input, InputWrapper } from '../ui/Input'
@@ -30,7 +31,7 @@ const LoginForm = () => {
         });
 
         if(response.data.signIn.success) {
-            console.log('save token in state') // navigate to the home page
+            setToken(response.data.signIn.token);
             router.push('/');
         }
         else {
@@ -52,7 +53,7 @@ const LoginForm = () => {
             <InputWrapper
             inputLabel='Username or Email'
             >
-                <Input
+                <Input 
                 {...register('usernameOrEmail')}
                 placeholder='Username or Email'
                 type='text'
