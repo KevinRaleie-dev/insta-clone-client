@@ -1,10 +1,15 @@
 import type { NextPage } from 'next';
+import Head from 'next/head';
+import { Nav } from '../components/nav/Nav';
 
 const Home: NextPage = () => {
   return (
-    <div className="bg-black text-white">
-      Hello insta clone
-    </div>
+   <div>
+     <Head>
+        <title>Instaclone</title>
+     </Head>
+     <Nav />
+   </div>
   )
 }
 

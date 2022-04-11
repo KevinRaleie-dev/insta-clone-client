@@ -5,6 +5,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { CREATE_USER } from '../../graphql/mutations';
 import { convertToObject } from '../../utils';
+import { Logo } from '../logo';
 import { ErrorLabel } from '../ui/ErrorLabel';
 import { Input, InputWrapper } from '../ui/Input';
 
@@ -47,9 +48,7 @@ const RegisterForm = () => {
 
   return (
     <div className='p-4'>
-        <h1
-        className='text-4xl text-center font-semibold pt-2'
-        >Instaclone</h1>
+        <Logo />
         <p
         className='text-center text-md text-gray-500 font-medium mt-2'
         >

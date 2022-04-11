@@ -1,5 +1,12 @@
-export const setToken = (token: string) => localStorage.setItem('token', token);
 
-export const getToken = (key: string) => localStorage.getItem(key);
+export function setToken(key: string, token: string) {
+    localStorage.setItem(key, token);
+}
 
-export const removeToken = (key: string) => localStorage.removeItem(key);
+export function getToken(key: string) {
+    return localStorage.getItem(key);
+}
+
+export function removeToken(key: string) {
+    localStorage.removeItem(key);
+}

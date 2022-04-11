@@ -9,7 +9,6 @@ import { convertToObject } from '../../utils'
 import { ErrorLabel } from '../ui/ErrorLabel'
 import { Input, InputWrapper } from '../ui/Input'
 
-
 type FormProps = {
     usernameOrEmail: string;
     password: string;
@@ -31,7 +30,7 @@ const LoginForm = () => {
         });
 
         if(response.data.signIn.success) {
-            setToken(response.data.signIn.token);
+            setToken('token', response.data.signIn.token);
             router.push('/');
         }
         else {
