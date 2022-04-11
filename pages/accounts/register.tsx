@@ -1,7 +1,7 @@
 import Head from 'next/head';
-import React from 'react'
-import Card from '../../components/ui/Card';
+import React from 'react';
 import RegisterForm from '../../components/forms/registerForm';
+import { Card } from '../../components/ui/card';
 import PlacholderImage from '../../components/ui/Image';
  
 const Register = () => {

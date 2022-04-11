@@ -6,8 +6,11 @@ import { useForm } from 'react-hook-form'
 import { LOGIN_USER } from '../../graphql/mutations'
 import { setToken } from '../../store'
 import { convertToObject } from '../../utils'
-import { ErrorLabel } from '../ui/ErrorLabel'
-import { Input, InputWrapper } from '../ui/Input'
+import { ErrorLabel } from '../ui/errorLabel'
+
+import { Input, InputWrapper } from '../ui/input/'
+
+
 
 type FormProps = {
     usernameOrEmail: string;

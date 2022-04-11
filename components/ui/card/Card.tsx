@@ -5,7 +5,7 @@ interface ICardProps {
     rightElement?: React.ReactElement; 
 }
 
-const Card: React.FunctionComponent<ICardProps> = ({
+export const Card: React.FunctionComponent<ICardProps> = ({
     leftElement,
     rightElement,
 }) => {
@@ -20,5 +20,3 @@ const Card: React.FunctionComponent<ICardProps> = ({
     </figure>
   )
 }
-
-export default Card

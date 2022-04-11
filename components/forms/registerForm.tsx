@@ -6,8 +6,8 @@ import { useForm } from 'react-hook-form';
 import { CREATE_USER } from '../../graphql/mutations';
 import { convertToObject } from '../../utils';
 import { Logo } from '../logo';
-import { ErrorLabel } from '../ui/ErrorLabel';
-import { Input, InputWrapper } from '../ui/Input';
+import { ErrorLabel } from '../ui/errorLabel';
+import { Input, InputWrapper } from '../ui/input';
 
 // Todo: add show and hide toggle for password
 interface IFormProps {
